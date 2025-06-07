@@ -8,6 +8,7 @@ use App\Models\Balance;
 use App\Models\Category;
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -15,19 +16,23 @@ class ExpenseController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth.custom');
     }
 
     public function index()
     {
-        $expenses = auth()->user()->expenses()->with(['category', 'balance'])->paginate(10);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $expenses = $user->expenses()->with(['category', 'balance'])->paginate(8);
         return view('expenses.index', compact('expenses'));
     }
 
     public function create()
     {
-        $categories = auth()->user()->categories()->where('type', 'expense')->get();
-        $balances = auth()->user()->balances()->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $categories = $user->categories()->where('type', 'expense')->get();
+        $balances = $user->balances()->get();
         return view('expenses.create', compact('categories', 'balances'));
     }
 
@@ -38,7 +43,9 @@ class ExpenseController extends BaseController
             $balance = Balance::findOrFail($data['balance_id']);
             $this->authorize('update', $balance);
 
-            $expense = auth()->user()->expenses()->create($data);
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $expense = $user->expenses()->create($data);
             $balance->decrement('amount', $data['amount']);
         });
 
@@ -54,8 +61,10 @@ class ExpenseController extends BaseController
     public function edit(Expense $expense)
     {
         $this->authorize('update', $expense);
-        $categories = auth()->user()->categories()->where('type', 'expense')->get();
-        $balances = auth()->user()->balances()->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $categories = $user->categories()->where('type', 'expense')->get();
+        $balances = $user->balances()->get();
         return view('expenses.edit', compact('expense', 'categories', 'balances'));
     }
 
@@ -71,7 +80,6 @@ class ExpenseController extends BaseController
 
             $expense->update($data);
 
-            // Adjust balances
             $oldBalance->increment('amount', $oldAmount);
             $newBalance->decrement('amount', $data['amount']);
         });

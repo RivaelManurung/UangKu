@@ -6,19 +6,21 @@ use App\Http\Requests\StoreBalanceRequest;
 use App\Http\Requests\UpdateBalanceRequest;
 use App\Models\Balance;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
 
 class BalanceController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth.custom');
     }
 
     public function index()
     {
-        $balances = auth()->user()->balances()->paginate(10);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $balances = $user->balances()->paginate(10);
         return view('balances.index', compact('balances'));
     }
 
@@ -29,7 +31,9 @@ class BalanceController extends BaseController
 
     public function store(StoreBalanceRequest $request)
     {
-        auth()->user()->balances()->create($request->validated());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->balances()->create($request->validated());
         return redirect()->route('balances.index')->with('success', 'Balance created successfully.');
     }
 

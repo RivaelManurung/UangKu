@@ -8,6 +8,7 @@ use App\Models\Balance;
 use App\Models\Category;
 use App\Models\Income;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -15,19 +16,23 @@ class IncomeController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth.custom');
     }
 
     public function index()
     {
-        $incomes = auth()->user()->incomes()->with(['category', 'balance'])->paginate(10);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $incomes = $user->incomes()->with(['category', 'balance'])->paginate(8);
         return view('incomes.index', compact('incomes'));
     }
 
     public function create()
     {
-        $categories = auth()->user()->categories()->where('type', 'income')->get();
-        $balances = auth()->user()->balances()->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $categories = $user->categories()->where('type', 'income')->get();
+        $balances = $user->balances()->get();
         return view('incomes.create', compact('categories', 'balances'));
     }
 
@@ -38,7 +43,9 @@ class IncomeController extends BaseController
             $balance = Balance::findOrFail($data['balance_id']);
             $this->authorize('update', $balance);
 
-            $income = auth()->user()->incomes()->create($data);
+            /** @var \App\Models\User $user */
+            $user = Auth::user();
+            $income = $user->incomes()->create($data);
             $balance->increment('amount', $data['amount']);
         });
 
@@ -54,8 +61,10 @@ class IncomeController extends BaseController
     public function edit(Income $income)
     {
         $this->authorize('update', $income);
-        $categories = auth()->user()->categories()->where('type', 'income')->get();
-        $balances = auth()->user()->balances()->get();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $categories = $user->categories()->where('type', 'income')->get();
+        $balances = $user->balances()->get();
         return view('incomes.edit', compact('income', 'categories', 'balances'));
     }
 
@@ -71,7 +80,6 @@ class IncomeController extends BaseController
 
             $income->update($data);
 
-            // Adjust balances
             $oldBalance->decrement('amount', $oldAmount);
             $newBalance->increment('amount', $data['amount']);
         });

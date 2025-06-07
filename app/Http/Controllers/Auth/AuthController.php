@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
@@ -9,12 +9,13 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Routing\Controller as BaseController;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('admin.auth.login');
     }
 
     public function login(LoginRequest $request)
@@ -31,7 +32,7 @@ class AuthController extends Controller
 
     public function showRegisterForm()
     {
-        return view('auth.register');
+        return view('admin.auth.register');
     }
 
     public function register(RegisterRequest $request)
@@ -56,7 +57,7 @@ class AuthController extends Controller
 
     public function showPasswordResetForm()
     {
-        return view('auth.passwords.email');
+        return view('admin.auth.passwords.email');
     }
 
     public function sendPasswordResetLink(PasswordResetRequest $request)
@@ -70,7 +71,7 @@ class AuthController extends Controller
 
     public function showResetForm($token)
     {
-        return view('auth.passwords.reset', ['token' => $token]);
+        return view('admin.auth.passwords.reset', ['token' => $token]);
     }
 
     public function resetPassword(Request $request)

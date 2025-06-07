@@ -6,18 +6,21 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
 
 class CategoryController extends BaseController
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth.custom');
     }
 
     public function index()
     {
-        $categories = auth()->user()->categories()->paginate(10);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $categories = $user->categories()->paginate(10);
         return view('categories.index', compact('categories'));
     }
 
@@ -28,7 +31,9 @@ class CategoryController extends BaseController
 
     public function store(StoreCategoryRequest $request)
     {
-        auth()->user()->categories()->create($request->validated());
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $user->categories()->create($request->validated());
         return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
