@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
@@ -24,7 +24,7 @@ Route::middleware('guest')->group(function () {
     Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('auth.custom')->group(function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -10,27 +11,52 @@ class User extends Authenticatable
 
     protected $casts = ['email_verified_at' => 'datetime'];
 
-    public function categories()
+    /**
+     * Get the categories for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class);
     }
 
-    public function balances()
+    /**
+     * Get the balances for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function balances(): HasMany
     {
         return $this->hasMany(Balance::class);
     }
 
-    public function incomes()
+    /**
+     * Get the incomes for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function incomes(): HasMany
     {
         return $this->hasMany(Income::class);
     }
 
-    public function expenses()
+    /**
+     * Get the expenses for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);
     }
 
-    public function getProfilePhotoUrlAttribute()
+    /**
+     * Get the URL for the user's profile photo.
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrlAttribute(): string
     {
         return $this->profile_photo ? asset('storage/' . $this->profile_photo) : asset('images/default-avatar.png');
     }
