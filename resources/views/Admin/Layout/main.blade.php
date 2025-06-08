@@ -49,7 +49,7 @@
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
         <!-- Menu -->
-        @include('sidebar')
+        @include('Admin.Layout.sidebar')
         <!-- / Menu -->
 
         <!-- Layout container -->
@@ -163,7 +163,7 @@
             <!-- / Content -->
 
             <!-- Footer -->
-            @include('footer')
+            @include('Admin.Layout.footer')
             <!-- / Footer -->
 
             <div class="content-backdrop fade"></div>

@@ -29,6 +29,6 @@ class DashboardController extends Controller
         $recentIncomes = $user->incomes()->with(['category', 'balance'])->latest()->take(5)->get();
         $recentExpenses = $user->expenses()->with(['category', 'balance'])->latest()->take(5)->get();
 
-        return view('dashboard', compact('totalBalance', 'totalIncome', 'totalExpense', 'recentIncomes', 'recentExpenses'));
+        return view('admin.dashboard', compact('totalBalance', 'totalIncome', 'totalExpense', 'recentIncomes', 'recentExpenses'));
     }
 }

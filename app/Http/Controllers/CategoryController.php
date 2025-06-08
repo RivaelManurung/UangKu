@@ -21,7 +21,7 @@ class CategoryController extends BaseController
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $categories = $user->categories()->paginate(10);
-        return view('categories.index', compact('categories'));
+        return view('admin.category.index', compact('categories'));
     }
 
     public function create()

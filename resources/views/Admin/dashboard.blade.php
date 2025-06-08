@@ -1,4 +1,4 @@
-@extends('main')
+@extends('Admin.Layout.main')
 
 @section('title', 'Demo: Dashboard - Analytics | Sneat - Bootstrap Dashboard FREE')
 
