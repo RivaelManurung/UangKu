@@ -1,4 +1,5 @@
-<div class="modal fade" id="createBalanceModal" tabindex="-1" aria-labelledby="createBalanceModalLabel" aria-hidden="true">
+<div class="modal fade" id="createBalanceModal" tabindex="-1" aria-labelledby="createBalanceModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,72 +9,61 @@
       <div class="modal-body">
         <form action="{{ route('balances.store') }}" method="POST">
           @csrf
+          <!-- Account Name -->
           <div class="mb-6">
             <label class="form-label" for="balance-name">Balance Name</label>
-            <div class="input-group input-group-merge">
-              <span id="balance-name-icon" class="input-group-text">
-                <i class="icon-base bx bx-wallet"></i>
-              </span>
-              <input
-                type="text"
-                class="form-control"
-                id="balance-name"
-                name="name"
-                placeholder="Enter balance name"
-                aria-label="Enter balance name"
-                aria-describedby="balance-name-icon"
-                value="{{ old('name') }}"
-                required />
-            </div>
-            @error('name')
-              <div class="text-danger form-text">{{ $message }}</div>
+            <input type="text" class="form-control" id="balance-name" name="account_name"
+              placeholder="Enter balance name" value="{{ old('account_name') }}" required />
+            @error('account_name')
+            <div class="text-danger form-text">{{ $message }}</div>
             @enderror
           </div>
+
+          <!-- Amount -->
           <div class="mb-6">
             <label class="form-label" for="balance-amount">Amount</label>
-            <div class="input-group input-group-merge">
-              <span id="balance-amount-icon" class="input-group-text">
-                <i class="icon-base bx bx-dollar"></i>
-              </span>
-              <input
-                type="number"
-                step="0.01"
-                class="form-control"
-                id="balance-amount"
-                name="amount"
-                placeholder="Enter amount"
-                aria-label="Enter amount"
-                aria-describedby="balance-amount-icon"
-                value="{{ old('amount') }}"
-                required />
-            </div>
+            <input type="number" step="0.01" class="form-control" id="balance-amount" name="amount"
+              placeholder="Enter amount" value="{{ old('amount') }}" required />
             @error('amount')
-              <div class="text-danger form-text">{{ $message }}</div>
+            <div class="text-danger form-text">{{ $message }}</div>
             @enderror
           </div>
+
+          <!-- Account Type -->
+          <div class="mb-6">
+            <label class="form-label" for="account-type">Account Type</label>
+            <select id="account-type" name="account_type" class="form-control" required>
+              <option value="cash">Cash</option>
+              <option value="bank">Bank</option>
+              <option value="credit_card">Credit Card</option>
+              <option value="investment">Investment</option>
+              <option value="other">Other</option>
+            </select>
+            @error('account_type')
+            <div class="text-danger form-text">{{ $message }}</div>
+            @enderror
+          </div>
+
+          <!-- Currency -->
+          <input type="hidden" name="currency" value="IDR">
+
+          <!-- Description -->
           <div class="mb-6">
             <label class="form-label" for="balance-description">Description</label>
-            <div class="input-group input-group-merge">
-              <span id="balance-description-icon" class="input-group-text">
-                <i class="icon-base bx bx-comment"></i>
-              </span>
-              <textarea
-                id="balance-description"
-                class="form-control"
-                name="description"
-                placeholder="Enter description"
-                aria-label="Enter description"
-                aria-describedby="balance-description-icon">{{ old('description') }}</textarea>
-            </div>
+            <textarea id="balance-description" class="form-control" name="description"
+              placeholder="Enter description">{{ old('description') }}</textarea>
             @error('description')
-              <div class="text-danger form-text">{{ $message }}</div>
+            <div class="text-danger form-text">{{ $message }}</div>
             @enderror
           </div>
+
+          <!-- Buttons -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Save Balance</button>
           </div>
         </form>
+
       </div>
     </div>
   </div>

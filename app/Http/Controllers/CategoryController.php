@@ -8,9 +8,12 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class CategoryController extends BaseController
 {
+    use AuthorizesRequests; // ✅ TAMBAHKAN INI
+
     public function __construct()
     {
         $this->middleware('auth.custom');

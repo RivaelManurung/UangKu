@@ -27,7 +27,7 @@
               <td>{{ $balance->id }}</td>
               <td>
                 <i class="icon-base bx bx-wallet icon-md text-primary me-4"></i>
-                <span>{{ $balance->name }}</span>
+                <span>{{ $balance->account_name }}</span>
               </td>
               <td>{{ number_format($balance->amount, 2) }}</td>
               <td>{{ Str::limit($balance->description, 50, '...') }}</td>
@@ -42,13 +42,13 @@
                       data-bs-toggle="modal"
                       data-bs-target="#editBalanceModal"
                       data-id="{{ $balance->id }}"
-                      data-name="{{ $balance->name }}"
+                      data-name="{{ $balance->account_name }}"
                       data-amount="{{ $balance->amount }}"
                       data-description="{{ $balance->description }}"
                     >
                       <i class="icon-base bx bx-edit-alt me-1"></i> Edit
                     </button>
-                    <form action="{{ route('admin.balance.destroy', $balance->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('balances.destroy', $balance->id) }}" method="POST" style="display:inline;">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this balance?');">

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
+    
     protected $fillable = ['name', 'email', 'password', 'profile_photo'];
 
     protected $casts = ['email_verified_at' => 'datetime'];
