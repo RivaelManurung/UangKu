@@ -16,6 +16,7 @@
           <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Type</th>
             <th>Description</th>
             <th>Actions</th>
           </tr>
@@ -28,6 +29,11 @@
                 <i class="icon-base bx bx-category icon-md text-primary me-4"></i>
                 <span>{{ $category->name }}</span>
               </td>
+              <td>
+                <span class="badge bg-label-{{ $category->type === 'income' ? 'success' : 'danger' }}">
+                  {{ ucfirst($category->type) }}
+                </span>
+              </td>
               <td>{{ Str::limit($category->description, 50, '...') }}</td>
               <td>
                 <div class="dropdown">
@@ -35,10 +41,10 @@
                     <i class="icon-base bx bx-dots-vertical-rounded"></i>
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ url('categories/' . $category->id . '/edit') }}">
+                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editCategoryModal{{ $category->id }}">
                       <i class="icon-base bx bx-edit-alt me-1"></i> Edit
-                    </a>
-                    <form action="{{ url('categories/' . $category->id) }}" method="POST" style="display:inline;">
+                    </button>
+                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this category?');">
@@ -49,13 +55,19 @@
                 </div>
               </td>
             </tr>
+            <!-- Include Edit Modal for this category -->
+            @include('admin.category.edit-modal', ['category' => $category])
           @empty
             <tr>
-              <td colspan="4" class="text-center">No categories found.</td>
+              <td colspan="5" class="text-center">No categories found.</td>
             </tr>
           @endforelse
         </tbody>
       </table>
+      <!-- Pagination -->
+      <div class="d-flex justify-content-end mt-4">
+        {{ $categories->links() }}
+      </div>
     </div>
   </div>
   <!--/ Hoverable Table rows -->

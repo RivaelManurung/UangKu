@@ -21,12 +21,12 @@ class BalanceController extends BaseController
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $balances = $user->balances()->paginate(10);
-        return view('balances.index', compact('balances'));
+        return view('admin.balance.index', compact('balances'));
     }
 
     public function create()
     {
-        return view('balances.create');
+        return view('admin.balance.create');
     }
 
     public function store(StoreBalanceRequest $request)
@@ -34,32 +34,32 @@ class BalanceController extends BaseController
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $user->balances()->create($request->validated());
-        return redirect()->route('balances.index')->with('success', 'Balance created successfully.');
+        return redirect()->route('admin.balance.index')->with('success', 'Balance created successfully.');
     }
 
     public function show(Balance $balance)
     {
         $this->authorize('view', $balance);
-        return view('balances.show', compact('balance'));
+        return view('admin.balance.show', compact('balance'));
     }
 
     public function edit(Balance $balance)
     {
         $this->authorize('update', $balance);
-        return view('balances.edit', compact('balance'));
+        return view('admin.balance.edit', compact('balance'));
     }
 
     public function update(UpdateBalanceRequest $request, Balance $balance)
     {
         $this->authorize('update', $balance);
         $balance->update($request->validated());
-        return redirect()->route('balances.index')->with('success', 'Balance updated successfully.');
+        return redirect()->route('admin.balance.index')->with('success', 'Balance updated successfully.');
     }
 
     public function destroy(Balance $balance)
     {
         $this->authorize('delete', $balance);
         $balance->delete();
-        return redirect()->route('balances.index')->with('success', 'Balance deleted successfully.');
+        return redirect()->route('admin.balance.index')->with('success', 'Balance deleted successfully.');
     }
 }

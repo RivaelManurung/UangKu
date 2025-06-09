@@ -24,7 +24,9 @@ class IncomeController extends BaseController
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $incomes = $user->incomes()->with(['category', 'balance'])->paginate(8);
-        return view('incomes.index', compact('incomes'));
+        $categories = $user->categories()->where('type', 'income')->get();
+        $balances = $user->balances()->get();
+        return view('admin.income.index', compact('incomes', 'categories', 'balances'));
     }
 
     public function create()
@@ -33,7 +35,7 @@ class IncomeController extends BaseController
         $user = Auth::user();
         $categories = $user->categories()->where('type', 'income')->get();
         $balances = $user->balances()->get();
-        return view('incomes.create', compact('categories', 'balances'));
+        return view('admin.income.create', compact('categories', 'balances'));
     }
 
     public function store(StoreIncomeRequest $request)
@@ -49,13 +51,13 @@ class IncomeController extends BaseController
             $balance->increment('amount', $data['amount']);
         });
 
-        return redirect()->route('incomes.index')->with('success', 'Income recorded successfully.');
+        return redirect()->route('admin.income.index')->with('success', 'Income recorded successfully.');
     }
 
     public function show(Income $income)
     {
         $this->authorize('view', $income);
-        return view('incomes.show', compact('income'));
+        return view('admin.income.show', compact('income'));
     }
 
     public function edit(Income $income)
@@ -65,7 +67,7 @@ class IncomeController extends BaseController
         $user = Auth::user();
         $categories = $user->categories()->where('type', 'income')->get();
         $balances = $user->balances()->get();
-        return view('incomes.edit', compact('income', 'categories', 'balances'));
+        return view('admin.income.edit', compact('income', 'categories', 'balances'));
     }
 
     public function update(UpdateIncomeRequest $request, Income $income)
@@ -84,7 +86,7 @@ class IncomeController extends BaseController
             $newBalance->increment('amount', $data['amount']);
         });
 
-        return redirect()->route('incomes.index')->with('success', 'Income updated successfully.');
+        return redirect()->route('admin.income.index')->with('success', 'Income updated successfully.');
     }
 
     public function destroy(Income $income)
@@ -96,6 +98,6 @@ class IncomeController extends BaseController
             $income->delete();
         });
 
-        return redirect()->route('incomes.index')->with('success', 'Income deleted successfully.');
+        return redirect()->route('admin.income.index')->with('success', 'Income deleted successfully.');
     }
 }
