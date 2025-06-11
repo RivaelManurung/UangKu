@@ -25,50 +25,46 @@
         </thead>
         <tbody class="table-border-bottom-0">
           @forelse ($incomes as $income)
-            <tr>
-              <td>{{ $income->id }}</td>
-              <td>
-                <i class="icon-base bx bx-category icon-md text-primary me-4"></i>
-                <span>{{ $income->category->name }}</span>
-              </td>
-              <td>{{ number_format($income->amount, 2) }}</td>
-              <td>{{ $income->balance->name }}</td>
-              <td>{{ \Carbon\Carbon::parse($income->date)->format('d M Y') }}</td>
-              <td>{{ Str::limit($income->description, 30, '...') }}</td>
-              <td>
-                <div class="dropdown">
-                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                    <i class="icon-base bx bx-dots-vertical-rounded"></i>
+          <tr>
+            <td>{{ $income->id }}</td>
+            <td>
+              <i class="icon-base bx bx-category icon-md text-primary me-4"></i>
+              <span>{{ $income->category->name }}</span>
+            </td>
+            <td>{{ number_format($income->amount, 2) }}</td>
+            <td>{{ $income->balance->account_name }}</td>
+            <td>{{ \Carbon\Carbon::parse($income->date)->format('d M Y') }}</td>
+            <td>{{ Str::limit($income->description, 30, '...') }}</td>
+            <td>
+              <div class="dropdown">
+                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                  <i class="icon-base bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu">
+                  <button class="dropdown-item edit-income" data-bs-toggle="modal" data-bs-target="#editIncomeModal"
+                    data-id="{{ $income->id }}" data-category-id="{{ $income->category_id }}"
+                    data-amount="{{ $income->amount }}" data-currency="{{ $income->currency }}"
+                    data-balance-id="{{ $income->balance_id }}" data-date="{{ $income->date }}"
+                    data-source-type="{{ $income->source_type }}" data-reference="{{ $income->reference }}"
+                    data-description="{{ $income->description }}">
+                    <i class="icon-base bx bx-edit-alt me-1"></i> Edit
                   </button>
-                  <div class="dropdown-menu">
-                    <button
-                      class="dropdown-item edit-income"
-                      data-bs-toggle="modal"
-                      data-bs-target="#editIncomeModal"
-                      data-id="{{ $income->id }}"
-                      data-category-id="{{ $income->category_id }}"
-                      data-amount="{{ $income->amount }}"
-                      data-balance-id="{{ $income->balance_id }}"
-                      data-date="{{ $income->date }}"
-                      data-description="{{ $income->description }}"
-                    >
-                      <i class="icon-base bx bx-edit-alt me-1"></i> Edit
+                  <form action="{{ route('incomes.destroy', $income->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="dropdown-item"
+                      onclick="return confirm('Are you sure you want to delete this income?');">
+                      <i class="icon-base bx bx-trash me-1"></i> Delete
                     </button>
-                    <form action="{{ route('incomes.destroy', $income->id) }}" method="POST" style="display:inline;">
-                      @csrf
-                      @method('DELETE')
-                      <button type="submit" class="dropdown-item" onclick="return confirm('Are you sure you want to delete this income?');">
-                        <i class="icon-base bx bx-trash me-1"></i> Delete
-                      </button>
-                    </form>
-                  </div>
+                  </form>
                 </div>
-              </td>
-            </tr>
+              </div>
+            </td>
+          </tr>
           @empty
-            <tr>
-              <td colspan="7" class="text-center">No incomes found.</td>
-            </tr>
+          <tr>
+            <td colspan="7" class="text-center">No incomes found.</td>
+          </tr>
           @endforelse
         </tbody>
       </table>
@@ -88,23 +84,29 @@
 
 @section('scripts')
 <script>
-document.querySelectorAll('.edit-income').forEach(button => {
+  document.querySelectorAll('.edit-income').forEach(button => {
     button.addEventListener('click', function () {
         const modal = document.querySelector('#editIncomeModal');
-        const form = modal.querySelector('form');
+        const form = modal.querySelector('#editIncomeForm');
         const id = this.getAttribute('data-id');
         const categoryId = this.getAttribute('data-category-id');
         const amount = this.getAttribute('data-amount');
+        const currency = this.getAttribute('data-currency');
         const balanceId = this.getAttribute('data-balance-id');
         const date = this.getAttribute('data-date');
+        const sourceType = this.getAttribute('data-source-type');
+        const reference = this.getAttribute('data-reference');
         const description = this.getAttribute('data-description');
 
-        form.action = `/incomes/${id}`;
-        modal.querySelector('#income-category').value = categoryId;
-        modal.querySelector('#income-amount').value = amount;
-        modal.querySelector('#income-balance').value = balanceId;
-        modal.querySelector('#income-date').value = date;
-        modal.querySelector('#income-description').value = description || '';
+        form.action = `{{ route('incomes.update', ':id') }}`.replace(':id', id);
+        modal.querySelector('#edit-income-category').value = categoryId || '';
+        modal.querySelector('#edit-income-amount').value = amount || '';
+        modal.querySelector('#edit-income-currency').value = currency || '';
+        modal.querySelector('#edit-income-balance').value = balanceId || '';
+        modal.querySelector('#edit-income-date').value = date || '';
+        modal.querySelector('#edit-income-source-type').value = sourceType || '';
+        modal.querySelector('#edit-income-reference').value = reference || '';
+        modal.querySelector('#edit-income-description').value = description || '';
     });
 });
 </script>

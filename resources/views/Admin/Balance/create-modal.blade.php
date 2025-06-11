@@ -33,11 +33,11 @@
           <div class="mb-6">
             <label class="form-label" for="account-type">Account Type</label>
             <select id="account-type" name="account_type" class="form-control" required>
-              <option value="cash">Cash</option>
-              <option value="bank">Bank</option>
-              <option value="credit_card">Credit Card</option>
-              <option value="investment">Investment</option>
-              <option value="other">Other</option>
+              <option value="Cash">Cash</option>
+              <option value="Bank">Bank</option>
+              <option value="Credit_card">Credit Card</option>
+              <option value="Investment">Investment</option>
+              <option value="Other">Other</option>
             </select>
             @error('account_type')
             <div class="text-danger form-text">{{ $message }}</div>
