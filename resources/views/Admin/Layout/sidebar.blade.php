@@ -35,6 +35,13 @@
         <div class="text-truncate" data-i18n="Incomes">Incomes</div>
       </a>
     </li>
+    <!-- Expenses -->
+    <li class="menu-item {{ Request::is('expenses*') ? 'active open' : '' }}">
+      <a href="{{ url('expenses') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-money-withdraw"></i>
+        <div class="text-truncate" data-i18n="Expenses">Expenses</div>
+      </a>
+    </li>
     <!-- Balances -->
     <li class="menu-item {{ Request::is('balances*') ? 'active open' : '' }}">
       <a href="{{ url('balances') }}" class="menu-link">

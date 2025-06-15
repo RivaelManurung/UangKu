@@ -20,12 +20,14 @@ class ExpenseController extends BaseController
     }
 
     public function index()
-    {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $expenses = $user->expenses()->with(['category', 'balance'])->paginate(8);
-        return view('expenses.index', compact('expenses'));
-    }
+{
+    /** @var \App\Models\User $user */
+    $user = Auth::user();
+    $expenses = $user->expenses()->with(['category', 'balance'])->paginate(8);
+    $categories = $user->categories()->where('type', 'expense')->get();
+    $balances = $user->balances()->get();
+    return view('admin.expense.index', compact('expenses', 'categories', 'balances'));
+}
 
     public function create()
     {
@@ -33,7 +35,7 @@ class ExpenseController extends BaseController
         $user = Auth::user();
         $categories = $user->categories()->where('type', 'expense')->get();
         $balances = $user->balances()->get();
-        return view('expenses.create', compact('categories', 'balances'));
+        return view('admin.expense.create', compact('categories', 'balances'));
     }
 
     public function store(StoreExpenseRequest $request)
@@ -49,13 +51,13 @@ class ExpenseController extends BaseController
             $balance->decrement('amount', $data['amount']);
         });
 
-        return redirect()->route('expenses.index')->with('success', 'Expense recorded successfully.');
+        return redirect()->route('admin.expense.index')->with('success', 'Expense recorded successfully.');
     }
 
     public function show(Expense $expense)
     {
         $this->authorize('view', $expense);
-        return view('expenses.show', compact('expense'));
+        return view('admin.expense.show', compact('expense'));
     }
 
     public function edit(Expense $expense)
@@ -65,7 +67,7 @@ class ExpenseController extends BaseController
         $user = Auth::user();
         $categories = $user->categories()->where('type', 'expense')->get();
         $balances = $user->balances()->get();
-        return view('expenses.edit', compact('expense', 'categories', 'balances'));
+        return view('admin.expense.edit', compact('expense', 'categories', 'balances'));
     }
 
     public function update(UpdateExpenseRequest $request, Expense $expense)
@@ -84,7 +86,7 @@ class ExpenseController extends BaseController
             $newBalance->decrement('amount', $data['amount']);
         });
 
-        return redirect()->route('expenses.index')->with('success', 'Expense updated successfully.');
+        return redirect()->route('admin.expense.index')->with('success', 'Expense updated successfully.');
     }
 
     public function destroy(Expense $expense)
@@ -96,6 +98,6 @@ class ExpenseController extends BaseController
             $expense->delete();
         });
 
-        return redirect()->route('expenses.index')->with('success', 'Expense deleted successfully.');
+        return redirect()->route('admin.expense.index')->with('success', 'Expense deleted successfully.');
     }
 }
