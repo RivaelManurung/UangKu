@@ -19,7 +19,6 @@ class UpdateExpenseRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'balance_id' => ['required', 'exists:balances,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'currency' => ['required', 'string', 'size:3'],
             'date' => ['required', 'date'],
             'description' => ['nullable', 'string'],
             'payment_method' => ['nullable', Rule::in(['cash', 'credit_card', 'debit_card', 'bank_transfer', 'other'])],

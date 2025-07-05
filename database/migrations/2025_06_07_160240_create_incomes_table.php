@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('restrict');
             $table->foreignId('balance_id')->constrained()->onDelete('restrict');
             $table->decimal('amount', 15, 2);
-            $table->string('currency', 3)->default('USD');
             $table->date('date');
             $table->text('description')->nullable();
             $table->enum('source_type', ['salary', 'investment', 'freelance', 'gift', 'other'])->nullable();

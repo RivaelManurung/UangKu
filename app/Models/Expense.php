@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expense extends Model
 {
-    protected $fillable = ['user_id', 'category_id', 'balance_id', 'amount', 'currency', 'date', 'description', 'payment_method', 'reference', 'is_recurring', 'recurring_interval', 'recurring_end_date'];
+    protected $fillable = ['user_id', 'category_id', 'balance_id', 'amount', 'date', 'description', 'payment_method', 'reference', 'is_recurring', 'recurring_interval', 'recurring_end_date'];
 
     protected $casts = ['date' => 'date', 'is_recurring' => 'boolean', 'recurring_end_date' => 'date'];
 

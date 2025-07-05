@@ -20,7 +20,6 @@ class StoreTransactionRequest extends FormRequest
             'category_id' => ['required', 'exists:categories,id'],
             'balance_id' => ['required', 'exists:balances,id'],
             'amount' => ['required', 'numeric', 'min:0'],
-            'currency' => ['required', 'string', 'size:3'],
             'date' => ['required', 'date'],
             'description' => ['nullable', 'string', 'max:255'],
             'source_type' => ['nullable', Rule::in(['salary', 'investment', 'freelance', 'gift', 'other']), 'required_if:type,income'],

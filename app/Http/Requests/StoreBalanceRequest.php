@@ -16,11 +16,20 @@ class StoreBalanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'account_name' => ['required', 'string', 'max:255'],
-            'amount' => ['required', 'numeric', 'min:0'],
-            'account_type' => ['required', Rule::in(['cash', 'bank', 'credit_card', 'investment', 'other'])],
-            'currency' => ['required', 'string', 'size:3'],
-            'description' => ['nullable', 'string'],
+            'account_name' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
+            'description' => 'nullable|string',
+            'account_type' => [      // ✅ Perbaiki aturan ini
+                'required',
+                Rule::in([
+                    'Cash',
+                    'Bank_Account',
+                    'E-Wallet',
+                    'Credit_Card',
+                    'E-Money',
+                    'Investment'
+                ]),
+            ],
         ];
     }
 }

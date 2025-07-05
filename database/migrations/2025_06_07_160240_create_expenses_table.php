@@ -14,7 +14,6 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('restrict');
             $table->foreignId('balance_id')->constrained()->onDelete('restrict');
             $table->decimal('amount', 15, 2);
-            $table->string('currency', 3)->default('idr');
             $table->date('date');
             $table->text('description')->nullable();
             $table->enum('payment_method', ['cash', 'credit_card', 'debit_card', 'bank_transfer', 'other'])->nullable();

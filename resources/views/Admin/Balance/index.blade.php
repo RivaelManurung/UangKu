@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container-xxl flex-grow-1 container-p-y">
-  <!-- Hoverable Table rows -->
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h5 class="mb-0">Balances</h5>
@@ -66,15 +65,12 @@
           @endforelse
         </tbody>
       </table>
-      <!-- Pagination -->
       <div class="d-flex justify-content-end mt-4">
         {{ $balances->links() }}
       </div>
     </div>
   </div>
-  <!--/ Balances Table rows -->
 
-  <!-- Include Modals -->
   @include('admin.balance.create-modal')
   @include('admin.balance.edit-modal')
 </div>
@@ -82,21 +78,23 @@
 
 @section('scripts')
 <script>
-document.querySelectorAll('.edit-balance').forEach(button => {
-    button.addEventListener('click', function() {
-        const modal = document.querySelector('#editBalanceModal');
-        const form = modal.querySelector('form');
-        const id = this.getAttribute('data-id');
-        const name = this.getAttribute('data-name');
-        const amount = this.getAttribute('data-amount');
-        const accountType = this.getAttribute('data-account-type');
-        const description = this.getAttribute('data-description');
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.edit-balance').forEach(button => {
+        button.addEventListener('click', function () {
+            const modal = document.querySelector('#editBalanceModal');
+            const form = modal.querySelector('form');
+            const id = this.getAttribute('data-id');
+            const name = this.getAttribute('data-name');
+            const amount = this.getAttribute('data-amount');
+            const accountType = this.getAttribute('data-account-type');
+            const description = this.getAttribute('data-description');
 
-        form.action = `{{ route('balances.update', ':id') }}`.replace(':id', id);
-        modal.querySelector('#edit-balance-name').value = name || '';
-        modal.querySelector('#edit-balance-amount').value = amount || '';
-        modal.querySelector('#edit-balance-account-type').value = accountType || '';
-        modal.querySelector('#edit-balance-description').value = description || '';
+            form.action = `{{ route('balances.update', ':id') }}`.replace(':id', id);
+            modal.querySelector('#edit-balance-name').value = name || '';
+            modal.querySelector('#edit-balance-amount').value = amount || '';
+            modal.querySelector('#edit-balance-account-type').value = accountType || '';
+            modal.querySelector('#edit-balance-description').value = description || '';
+        });
     });
 });
 </script>

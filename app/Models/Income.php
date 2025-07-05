@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Income extends Model
 {
-    protected $fillable = ['user_id', 'category_id', 'balance_id', 'amount', 'currency', 'date', 'description', 'source_type', 'reference'];
+    protected $fillable = ['user_id', 'category_id', 'balance_id', 'amount', 'date', 'description', 'source_type', 'reference'];
 
     protected $casts = ['date' => 'date'];
 

@@ -33,22 +33,6 @@
             @enderror
           </div>
 
-          {{-- Currency --}}
-          <div class="mb-3">
-            <label class="form-label" for="income-currency">Currency</label>
-            <select class="form-select" id="income-currency" name="currency" required>
-              <option value="USD" {{ old('currency', 'USD') == 'USD' ? 'selected' : '' }}>USD</option>
-              <option value="IDR" {{ old('currency') == 'IDR' ? 'selected' : '' }}>IDR</option>
-              <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
-              <option value="GBP" {{ old('currency') == 'GBP' ? 'selected' : '' }}>GBP</option>
-              <option value="JPY" {{ old('currency') == 'JPY' ? 'selected' : '' }}>JPY</option>
-              <!-- Tambah currency lain jika perlu -->
-            </select>
-            @error('currency')
-              <div class="text-danger">{{ $message }}</div>
-            @enderror
-          </div>
-
           {{-- Balance --}}
           <div class="mb-3">
             <label class="form-label" for="income-balance">Balance</label>

@@ -27,12 +27,11 @@ class ExpenseController extends BaseController
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $expenses = $user->expenses()->with(['category', 'balance'])->latest()->paginate(8);
-        $categories = $user->categories()->where('type', 'expense')->get();
+        $categories = $user->categories()->where('type', 'income')->get();
         $balances = $user->balances()->get();
-        
-        // Semua data yang dibutuhkan oleh view index dan modalnya di-pass di sini
         return view('admin.expense.index', compact('expenses', 'categories', 'balances'));
     }
+
 
     /**
      * Menyimpan pengeluaran baru.
@@ -41,7 +40,7 @@ class ExpenseController extends BaseController
     {
         DB::transaction(function () use ($request) {
             $data = $request->validated();
-            
+
             /** @var \App\Models\User $user */
             $user = Auth::user();
             $balance = Balance::findOrFail($data['balance_id']);
@@ -56,7 +55,7 @@ class ExpenseController extends BaseController
             $balance->decrement('amount', $data['amount']);
         });
 
-        return redirect()->route('admin.expense.index')->with('success', 'Expense recorded successfully.');
+        return redirect()->route('expenses.index')->with('success', 'Expense recorded successfully.');
     }
 
     /**
@@ -69,10 +68,10 @@ class ExpenseController extends BaseController
 
         DB::transaction(function () use ($request, $expense) {
             $data = $request->validated();
-            
+
             $oldAmount = $expense->amount;
             $oldBalance = $expense->balance; // Mengambil relasi yang sudah di-load
-            
+
             // Kembalikan dulu saldo lama
             $oldBalance->increment('amount', $oldAmount);
 
@@ -84,7 +83,7 @@ class ExpenseController extends BaseController
             $newBalance->decrement('amount', $data['amount']);
         });
 
-        return redirect()->route('admin.expense.index')->with('success', 'Expense updated successfully.');
+        return redirect()->route('expenses.index')->with('success', 'Expense updated successfully.');
     }
 
     /**

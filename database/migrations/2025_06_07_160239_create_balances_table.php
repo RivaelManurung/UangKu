@@ -13,8 +13,17 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('account_name');
             $table->decimal('amount', 15, 2)->default(0.00);
-            $table->enum('account_type', ['cash', 'bank', 'credit_card', 'investment', 'other']);
-            $table->string('currency', 3)->default('IDR');
+
+            // Enum yang umum digunakan di Indonesia
+            $table->enum('account_type', [
+                'Cash',          // Uang Tunai
+                'Bank Account',  // Rekening Bank (BCA, Mandiri, dll.)
+                'E-Wallet',      // Dompet Digital (GoPay, OVO, Dana, ShopeePay)
+                'Credit Card',   // Kartu Kredit
+                'E-Money',       // Kartu Uang Elektronik (Flazz, Brizzi, TapCash)
+                'Investment'     // Rekening Investasi (Reksadana, Saham, dll.)
+            ]);
+
             $table->text('description')->nullable();
             $table->timestamps();
         });
