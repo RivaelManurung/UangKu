@@ -27,17 +27,6 @@
           </div>
 
           <div class="mb-3">
-            <label for="edit-income-currency" class="form-label">Currency</label>
-            <select id="edit-income-currency" name="currency" class="form-select" required>
-              <option value="USD">USD</option>
-              <option value="IDR">IDR</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-              <option value="JPY">JPY</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
             <label for="edit-income-balance" class="form-label">Balance</label>
             <select id="edit-income-balance" name="balance_id" class="form-select" required>
               <option value="">Select balance</option>

@@ -101,6 +101,6 @@ class ExpenseController extends BaseController
             $expense->delete();
         });
 
-        return redirect()->route('admin.expense.index')->with('success', 'Expense deleted successfully.');
+        return redirect()->route('expenses.index')->with('success', 'Expense deleted successfully.');
     }
 }

@@ -21,7 +21,7 @@ class UpdateIncomeRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:0'],
             'date' => ['required', 'date'],
             'description' => ['nullable', 'string'],
-            'source_type' => ['nullable', Rule::in(['salary', 'investment', 'freelance', 'gift', 'other'])],
+            'source_type' => ['nullable', Rule::in(['Gaji', 'Investasi', 'Freelance', 'Hadiah', 'Bisnis', 'Bunga Bank', 'Tabungan'])],
             'reference' => ['nullable', 'string', 'max:255'],
         ];
     }

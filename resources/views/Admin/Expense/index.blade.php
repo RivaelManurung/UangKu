@@ -94,7 +94,6 @@
             const route = this.getAttribute('data-route');
             const categoryId = this.getAttribute('data-category-id');
             const amount = this.getAttribute('data-amount');
-            const currency = this.getAttribute('data-currency');
             const balanceId = this.getAttribute('data-balance-id');
             const date = this.getAttribute('data-date');
             const reference = this.getAttribute('data-reference');
@@ -104,7 +103,6 @@
             form.action = route; // PERBAIKAN: Menggunakan rute dari data-attribute
             modal.querySelector('#edit-expense-category').value = categoryId || '';
             modal.querySelector('#edit-expense-amount').value = amount || '';
-            modal.querySelector('#edit-expense-currency').value = currency || '';
             modal.querySelector('#edit-expense-balance').value = balanceId || '';
             modal.querySelector('#edit-expense-date').value = date || '';
             modal.querySelector('#edit-expense-reference').value = reference || '';

@@ -1,4 +1,3 @@
-```blade
 <div class="modal fade" id="editExpenseModal" tabindex="-1" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -36,20 +35,6 @@
             @enderror
           </div>
 
-          {{-- Currency --}}
-          <div class="mb-3">
-            <label class="form-label" for="edit-expense-currency">Currency</label>
-            <select class="form-select" id="edit-expense-currency" name="currency" required>
-              <option value="USD">USD</option>
-              <option value="IDR">IDR</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-              <option value="JPY">JPY</option>
-            </select>
-            @error('currency')
-              <div class="text-danger">{{ $message }}</div>
-            @enderror
-          </div>
 
           {{-- Balance --}}
           <div class="mb-3">
@@ -104,4 +89,3 @@
     </div>
   </div>
 </div>
-```

@@ -49,38 +49,6 @@
         <div class="text-truncate" data-i18n="Balances">Balances</div>
       </a>
     </li>
-    <!-- Account Settings -->
-    <li class="menu-header small text-uppercase">
-      <span class="menu-header-text">Account</span>
-    </li>
-    <li class="menu-item {{ Request::is('pages/account-settings*') ? 'active open' : '' }}">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class="menu-icon tf-icons bx bx-dock-top"></i>
-        <div class="text-truncate" data-i18n="Account Settings">Account Settings</div>
-      </a>
-      <ul class="menu-sub">
-        <li class="menu-item {{ Request::is('pages/account-settings-account') ? 'active' : '' }}">
-          <a href="{{ url('pages/account-settings-account') }}" class="menu-link">
-            <div class="text-truncate" data-i18n="Account">Account</div>
-          </a>
-        </li>
-        <li class="menu-item {{ Request::is('pages/account-settings-notifications') ? 'active' : '' }}">
-          <a href="{{ url('pages/account-settings-notifications') }}" class="menu-link">
-            <div class="text-truncate" data-i18n="Notifications">Notifications</div>
-          </a>
-        </li>
-      </ul>
-    </li>
-    <!-- Misc -->
-    <li class="menu-header small text-uppercase">
-      <span class="menu-header-text">Misc</span>
-    </li>
-    <li class="menu-item">
-      <a href="https://github.com/themeselection/sneat-bootstrap-html-admin-template-free/issues" target="_blank"
-        class="menu-link">
-        <i class="menu-icon tf-icons bx bx-support"></i>
-        <div class="text-truncate" data-i18n="Support">Support</div>
-      </a>
-    </li>
+    
   </ul>
 </aside>
