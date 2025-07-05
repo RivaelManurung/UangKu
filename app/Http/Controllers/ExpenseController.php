@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\Balance;
-use App\Models\Category;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,84 +15,89 @@ class ExpenseController extends BaseController
 {
     public function __construct()
     {
+        // Asumsi 'auth.custom' adalah middleware otentikasi Anda
         $this->middleware('auth.custom');
     }
 
+    /**
+     * Menampilkan daftar pengeluaran beserta modal untuk menambah & mengedit.
+     */
     public function index()
-{
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
-    $expenses = $user->expenses()->with(['category', 'balance'])->paginate(8);
-    $categories = $user->categories()->where('type', 'expense')->get();
-    $balances = $user->balances()->get();
-    return view('admin.expense.index', compact('expenses', 'categories', 'balances'));
-}
-
-    public function create()
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+        $expenses = $user->expenses()->with(['category', 'balance'])->latest()->paginate(8);
         $categories = $user->categories()->where('type', 'expense')->get();
         $balances = $user->balances()->get();
-        return view('admin.expense.create', compact('categories', 'balances'));
+        
+        // Semua data yang dibutuhkan oleh view index dan modalnya di-pass di sini
+        return view('admin.expense.index', compact('expenses', 'categories', 'balances'));
     }
 
+    /**
+     * Menyimpan pengeluaran baru.
+     */
     public function store(StoreExpenseRequest $request)
     {
         DB::transaction(function () use ($request) {
             $data = $request->validated();
-            $balance = Balance::findOrFail($data['balance_id']);
-            $this->authorize('update', $balance);
-
+            
             /** @var \App\Models\User $user */
             $user = Auth::user();
-            $expense = $user->expenses()->create($data);
+            $balance = Balance::findOrFail($data['balance_id']);
+
+            // Perbaikan: Otorisasi dengan memeriksa kepemilikan langsung.
+            // Ini lebih jelas daripada menggunakan policy 'update' pada balance.
+            if ($balance->user_id !== $user->id) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            $user->expenses()->create($data);
             $balance->decrement('amount', $data['amount']);
         });
 
         return redirect()->route('admin.expense.index')->with('success', 'Expense recorded successfully.');
     }
 
-    public function show(Expense $expense)
-    {
-        $this->authorize('view', $expense);
-        return view('admin.expense.show', compact('expense'));
-    }
-
-    public function edit(Expense $expense)
-    {
-        $this->authorize('update', $expense);
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-        $categories = $user->categories()->where('type', 'expense')->get();
-        $balances = $user->balances()->get();
-        return view('admin.expense.edit', compact('expense', 'categories', 'balances'));
-    }
-
+    /**
+     * Mengupdate data pengeluaran.
+     */
     public function update(UpdateExpenseRequest $request, Expense $expense)
     {
+        // Otorisasi untuk memastikan pengguna hanya bisa mengedit pengeluarannya sendiri.
+        $this->authorize('update', $expense);
+
         DB::transaction(function () use ($request, $expense) {
             $data = $request->validated();
-            $this->authorize('update', $expense);
-
+            
             $oldAmount = $expense->amount;
-            $oldBalance = Balance::findOrFail($expense->balance_id);
-            $newBalance = Balance::findOrFail($data['balance_id']);
+            $oldBalance = $expense->balance; // Mengambil relasi yang sudah di-load
+            
+            // Kembalikan dulu saldo lama
+            $oldBalance->increment('amount', $oldAmount);
 
+            // Update pengeluaran dengan data baru
             $expense->update($data);
 
-            $oldBalance->increment('amount', $oldAmount);
+            // Kurangi saldo baru (bisa jadi akun yang sama atau berbeda)
+            $newBalance = Balance::findOrFail($data['balance_id']);
             $newBalance->decrement('amount', $data['amount']);
         });
 
         return redirect()->route('admin.expense.index')->with('success', 'Expense updated successfully.');
     }
 
+    /**
+     * Menghapus data pengeluaran.
+     */
     public function destroy(Expense $expense)
     {
+        // Otorisasi untuk memastikan pengguna hanya bisa menghapus pengeluarannya sendiri.
+        $this->authorize('delete', $expense);
+
         DB::transaction(function () use ($expense) {
-            $this->authorize('delete', $expense);
-            $balance = Balance::findOrFail($expense->balance_id);
+            $balance = $expense->balance;
+            // Kembalikan jumlah saldo sebelum menghapus data pengeluaran
             $balance->increment('amount', $expense->amount);
             $expense->delete();
         });
